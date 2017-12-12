@@ -8,7 +8,7 @@
     
     <script type="text/javascript">
         var viz;
-        var index = 0;
+        var index = 1;
         var filters = ['Philly', 'New York', 'Boston', 'D.C.', 'Chicago', 'Los Angeles'];
         
 
@@ -20,7 +20,7 @@
                     onFirstInteractive: function () {
                       workbook = viz.getWorkbook();
                       activeSheet = workbook.getActiveSheet();
-                      setInterval(changeFilter(), 60000);
+                      setInterval(changeFilter, 30000);
                     }
                 };
             
@@ -29,11 +29,7 @@
 
         }
         function changeFilter() {
-            activeSheet
-              .getWorksheets()
-              .get("Region")
-              .applyFilterAsync("region", filters[index], tableau.FilterUpdateType.REPLACE)
-              .otherwise(function (err) {console.log(err);});
+            activeSheet.getWorksheets().get("Region").applyFilterAsync("region", filters[index], tableau.FilterUpdateType.REPLACE).otherwise(function (err) {console.log(err);});
             index = (index + 1) % filters.length;
         }
 
