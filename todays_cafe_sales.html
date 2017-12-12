@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    
+    <script type="text/javascript" 
+        src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
+    
+    <script type="text/javascript">
+        var viz;
+        var index = 0;
+        var filters = ['Philly', 'New York', 'Boston', 'D.C.', 'Chicago', 'Los Angeles'];
+        
+
+        function initViz() {
+            var containerDiv = document.getElementById("vizContainer"),
+                url = "https://us-east-1.online.tableau.com/#/site/lacolombedataispower/views/Realtime/TodaysSales",
+                options = {
+                    hideTabs: true,
+                    onFirstInteractive: function () {
+                      workbook = viz.getWorkbook();
+                      activeSheet = workbook.getActiveSheet();
+                      setInterval(changeFilter(), 60000);
+                    }
+                };
+            
+            viz = new tableau.Viz(containerDiv, url, options);
+
+
+        }
+        function changeFilter() {
+            activeSheet
+              .getWorksheets()
+              .get("Region")
+              .applyFilterAsync("region", filters[index], tableau.FilterUpdateType.REPLACE)
+              .otherwise(function (err) {console.log(err);});
+            index = (index + 1) % filters.length;
+        }
+
+    </script>
+</head>
+
+<body onload="initViz(); ">
+    <div id="vizContainer"></div>
+</body>
+
+</html>
+
+
